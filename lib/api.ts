@@ -38,9 +38,9 @@ export async function getProducts(): Promise<Product[]> {
 }
 
 export async function getProductBySlug(slug: string): Promise<Product | null> {
-  const list = await getJson<Product[]>(`/products?slug=${encodeURIComponent(slug)}`);
-  // The API filters by slug, but guard anyway.
-  return list.find((p) => p.slug === slug) ?? null;
+  // One cached list request is shared by every page, so reuse it.
+  const all = await getProducts();
+  return all.find((p) => p.slug === slug) ?? null;
 }
 
 export async function getProductsByCategory(slug: string): Promise<Product[]> {
