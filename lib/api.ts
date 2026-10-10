@@ -7,13 +7,19 @@ const API_BASE =
 const REVALIDATE = 300; // seconds
 
 async function getJson<T>(path: string): Promise<T> {
-  const res = await fetch(`${API_BASE}${path}`, {
-    next: { revalidate: REVALIDATE },
-  });
-  if (!res.ok) throw new Error(`API ${path} failed: ${res.status}`);
-  return res.json() as Promise<T>;
+  let lastStatus = 0;
+  for (let attempt = 0; attempt < 4; attempt++) {
+    const res = await fetch(`${API_BASE}${path}`, {
+      next: { revalidate: REVALIDATE },
+    });
+    if (res.ok) return res.json() as Promise<T>;
+    lastStatus = res.status;
+    // retry only on rate limit / server errors
+    if (res.status !== 429 && res.status < 500) break;
+    await new Promise((r) => setTimeout(r, 1000 * 2 ** attempt));
+  }
+  throw new Error(`API ${path} failed: ${lastStatus}`);
 }
-
 export const FALLBACK_CATEGORIES: Category[] = [
   { id: "chal", slug: "chal", nameBn: "চাল", icon: "🍚" },
   { id: "dal", slug: "dal", nameBn: "ডাল", icon: "🫘" },

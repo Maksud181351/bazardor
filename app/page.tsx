@@ -5,7 +5,7 @@ import { getProducts, topFallers, topRisers } from "@/lib/api";
 import { formatBn } from "@/lib/format";
 import { HomeSkeleton } from "@/components/Skeletons";
 
-export const revalidate = 300;
+export const dynamic = 'force-dynamic';
 
 async function HomeSections() {
   const products = await getProducts();
