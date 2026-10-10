@@ -1,4 +1,5 @@
 # 🛒 বাজার দর (BazarDor)
+**Live site:** https://bazardor-murex-eight.vercel.app
 
 **বাজার দর — প্রয়োজনীয় পণ্যের দাম এক নজরে।**
 A Bangla market-price tracker for Bangladesh. Browse today's prices for rice, lentils, oil, vegetables, fish, meat, eggs/milk and spices, see which items rose or fell, and compare prices across markets in every division.
